@@ -9,12 +9,16 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "audit": "0.0.6",
         "body-parser": "^1.18.3",
         "express": "^4.16.3",
         "fast-json-patch": "^2.0.7",
+        "lodash": "^4.17.11",
         "moment": "^2.22.2",
         "mongoose": "^5.3.2",
         "mongoose-unique-validator": "^2.0.2",
+        "qs": "^6.5.2",
+        "underscore.string": "^3.3.5",
         "util": "^0.11.0"
     }
 }
