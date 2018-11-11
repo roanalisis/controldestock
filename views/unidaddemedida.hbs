@@ -1,0 +1,375 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Control de stock</title>
+
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="assets/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="assets/css/animate.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/styles/jqx.base.css" type="text/css" />
+    <link rel="stylesheet" href="assets/styles/jqx.material.css" type="text/css" />
+
+    <link href="assets/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+
+    <!-- Toastr style -->
+    <link href="assets/css/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <!-- Sweet Alert -->
+    <link href="assets/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+
+   
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+    {{> navbar }}
+
+        <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom">
+        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+            {{!-- <form role="search" class="navbar-form-custom" action="search_results.html">
+                <div class="form-group">
+                    <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+                </div>
+            </form> --}}
+        </div>
+            {{!--  --}}
+
+        </nav>
+        </div>
+            <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-lg-10">
+                    <h2>Parametrización de unidades de medidas</h2>
+                    <ol class="breadcrumb">
+                        <li>
+                            <a href="/">Inicio</a>
+                        </li>
+                        <li>
+                            <a>Parametrizar</a>
+                        </li>
+                        <li class="active">
+                            <strong>Unidad de medida</strong>
+                        </li>
+                    </ol>
+                </div>
+                <div class="col-lg-2">
+
+                </div>
+            </div>
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>Unidades de medidas </h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-sm-4 b-r">{{!-- <h3 class="m-t-none m-b">Sign in</h3> --}}
+                                {{!-- <p>Sign in today for more expirience.</p> --}}
+                                    <div class="form-group"><label>Ingrese una nueva Unidad:</label> <input type="text" placeholder="Ingrese unidad" id='text_unidad' class="form-control"></div>
+                                    <div>
+                                        <button type="button" class="btn btn-sm btn-primary pull-right m-t-n-xs" id="submit"><strong>Agregar</strong></button>
+                                    </div>
+                            </div>
+                            <div class="col-sm-8">
+                                <div id="grid_unidaddemedida"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                
+            </div>
+
+
+        
+        <div class="footer">
+            <div class="pull-right">
+               Powered by Juaneco &amp; Co. <i class="fa fa-mortar-board" aria-hidden="true"></i>
+            </div>
+            <div>
+                <strong>Copyright</strong> MMR &copy; 2018
+            </div>
+        </div> 
+
+        </div>
+        </div>
+
+        <div class="modal inmodal" id="editModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content animated bounceInRight">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <i class="fa fa-pencil modal-icon"></i>
+                        <h4 class="modal-title">Modificar Registro</h4>
+                        <small class="font-bold">Usted está por modificar un registro de la lista.</small>
+                    </div>
+                    <div class="modal-body">
+                                <div class="form-group"><label>Nombre de la Unidad</label> <input type="text" placeholder="Unidad" class="form-control" id="edit_text_unidad"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-white" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-primary" id='edit-submit'>Modificar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    <!-- Mainly scripts -->
+    <script src="assets/js/jquery-2.1.1.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="assets/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script type="text/javascript" src="assets/jqxcore.js"></script>
+    <script type="text/javascript" src="assets/jqxdata.js"></script>
+    <script type="text/javascript" src="assets/jqxloader.js"></script>
+    <script type="text/javascript" src="assets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="assets/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="assets/jqxmenu.js"></script>
+    <script type="text/javascript" src="assets/jqxgrid.js"></script>
+    <script type="text/javascript" src="assets/jqxgrid.pager.js"></script>
+    <script type="text/javascript" src="assets/jqxgrid.selection.js"></script>
+    <script type="text/javascript" src="assets/jqxgrid.sort.js"></script>
+    <script type="text/javascript" src="assets/jqxdata.js"></script>
+    <script type="text/javascript" src="assets/jqxlistbox.js"></script>
+    <script type="text/javascript" src="assets/jqxdropdownlist.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="assets/js/inspinia.js"></script>
+    <script src="assets/js/plugins/pace/pace.min.js"></script>
+    <!-- Toastr -->
+    <script src="assets/js/plugins/toastr/toastr.min.js"></script>
+    <!-- iCheck -->
+    <script src="assets/js/plugins/iCheck/icheck.min.js"></script>
+    <!-- Sweet alert -->
+    <script src="assets/js/plugins/sweetalert/sweetalert.min.js"></script>
+
+     <script type="text/javascript">
+     $("#nav_param").addClass('active');
+     $("#nav_param_um").addClass('active');
+        $(document).ready(function () {
+            // prepare the data
+            var source =
+            {
+                datatype:'json',
+                datafields:[
+                    {name: '_id'},
+                    {name: 'status'},
+                    {name: 'unidad'}
+                ],
+                url:'unidaddemedida/list',
+                root:'Rows',
+                sortcolumn: 'unidad',
+                sortdirection: 'desc',
+                beforeprocessing: function(data) {
+                    source.totalrecords = data['TotalRows'];
+                },
+                sort: function () {
+                    $("#grid_unidaddemedida").jqxGrid('updatebounddata');
+                }
+            };
+            var dataAdapter = new $.jqx.dataAdapter(source, {
+                formatData: function(data) {
+                    data.name_startsWith = $("#searchField").val();
+                    return data;
+                }
+            });
+            $("#grid_unidaddemedida").jqxGrid(
+            {
+                width: "98%",
+                theme: 'material',
+                source: dataAdapter,
+                sortable: true,
+                altrows: true,
+                showgroupsheader: false,
+                virtualmode: true,
+                pagesize: 10,
+                pagesizeoptions: ['10', '50', '100'],
+                pageable: true,
+                autoheight: true,
+                rendergridrows: function() {
+                    return dataAdapter.records;
+                },
+                columns: [
+                  { text: 'Unidad', datafield: 'unidad', width: '100%' }
+                ],
+                showtoolbar: true,
+                rendertoolbar: function(toolbar) {
+                    var me = this;
+					var container = $("<div style='margin: 5px;'></div>");
+					var input = $("<input class='jqx-input jqx-widget-content jqx-rc-all' id='searchField' type='text' style='height: 23px; float: left; width: 90%;' />");
+					toolbar.append(container);
+					container.append(input);
+					container.append('<button type="button" id="searchbutton"><span class="glyphicon glyphicon-search"></span></button>&nbsp;&nbsp;');
+                    container.append('<button type="button" id="Editrowbutton"><i class="fa fa-pencil" aria-hidden="true"></i></button>');
+                    container.append('<button type="button" id="Deleterowbutton"><i class="fa fa-trash" aria-hidden="true"></i></button>');
+                    $("#searchbutton").on('click', function (event) {
+						showLoader = true;
+						$("#grid_unidaddemedida").jqxGrid('updatebounddata');
+					});
+                    $("#Editrowbutton").jqxButton({disabled: true});
+					$('#Editrowbutton').click(function () {
+						var dataRecord = $("#grid_unidaddemedida").jqxGrid('getrowdata', $('#grid_unidaddemedida').jqxGrid('getselectedrowindex'));
+                        $('#edit_text_unidad').val(dataRecord.unidad);
+						$('#editModal').modal('show');
+					});
+                    $("#Deleterowbutton").jqxButton({disabled: true});
+					$('#Deleterowbutton').click(function () {
+                        var dataRecord = $("#grid_unidaddemedida").jqxGrid('getrowdata', $('#grid_unidaddemedida').jqxGrid('getselectedrowindex'));
+                        swal({
+                            title: "¿Está seguro que desea eliminar este registro?",
+                            text: "\""+dataRecord.unidad+"\" será eliminado de la lista actual.",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "Eliminar",
+                            cancelButtonText: "Cancelar",
+                            closeOnConfirm: false,
+                            closeOnCancel: false },
+                            function (isConfirm) {
+                            if (isConfirm) {
+                                var dataform = {
+                                    _id: dataRecord._id
+                                };
+                                $.ajax({
+                                    type: "DELETE", 
+                                    url: '/unidaddemedida',
+                                    data: dataform,
+                                    success: function(result){
+                                        if (result){
+                                            if(result.err) {
+                                                swal("Error", result.message, "error");
+                                            } else {
+                                                showLoader = true;
+						                        $("#grid_unidaddemedida").jqxGrid('updatebounddata');
+                                                swal("Eliminado", "El registro ha sido eliminado de la lista.", "success");
+                                            }
+                                        }else{
+                                            swal("Error", "Ha ocurrido un error.", "error");
+                                        }
+                                    }
+                                });
+                            } else {
+                                swal("Cancelado", "El registro no ha sido eliminado.", "error");
+                            }
+                        });
+					});
+                    $("#refresh").click(function () {
+						$('#grid_unidaddemedida').jqxGrid('clear');
+						$("#grid_unidaddemedida").jqxGrid("updatebounddata");
+					});
+                }
+            });
+        });
+
+        $("#grid_unidaddemedida").on("cellclick", function (event) {
+			$("#Editrowbutton").jqxButton({disabled: false});
+            $("#Deleterowbutton").jqxButton({disabled: false});
+		});
+
+        $("#submit").on('click',function(event){
+            var dataform = {
+                unidad: $("#text_unidad").val(),
+            };
+            $.ajax({
+                type: "POST", 
+                url: '/unidaddemedida',
+                data: dataform,
+                success: function(result){
+                    if (result){
+                        if(result.err) {
+                            toastr.options = {
+                                closeButton: true,
+                                progressBar: true,
+                                showMethod: 'slideDown',
+                                timeOut: 4000
+                            };
+                            toastr.error(result.message);
+                            if($(".jqx-grid")[0]){$(".jqx-grid").jqxGrid('updatebounddata');}
+                        } else {
+                            toastr.options = {
+                                closeButton: true,
+                                progressBar: true,
+                                showMethod: 'slideDown',
+                                timeOut: 4000
+                            };
+                            toastr.success(result.message);
+                            if($(".jqx-grid")[0]){$(".jqx-grid").jqxGrid('updatebounddata');}
+                            $("#text_unidad").val("");
+                        }
+                    }else{
+                        toastr.options = {
+                            closeButton: true,
+                            progressBar: true,
+                            showMethod: 'slideDown',
+                            timeOut: 4000
+                        };
+                        toastr.error('Ha ocurrido un error.');
+                    }
+                }
+            });
+	});
+
+    $("#edit-submit").on('click',function(event){
+            var dataform = {
+                _id: $("#grid_unidaddemedida").jqxGrid('getrowdata', $('#grid_unidaddemedida').jqxGrid('getselectedrowindex'))._id,
+                unidad: $("#edit_text_unidad").val(),
+            };
+            $.ajax({
+                type: "PUT", 
+                url: '/unidaddemedida',
+                data: dataform,
+                success: function(result){
+                    if (result){
+                        if(result.err) {
+                            toastr.options = {
+                                closeButton: true,
+                                progressBar: true,
+                                showMethod: 'slideDown',
+                                timeOut: 4000
+                            };
+                            toastr.error("Ha ocurrido un error.");
+                            if($(".jqx-grid")[0]){$(".jqx-grid").jqxGrid('updatebounddata');}
+                        } else {
+                            toastr.options = {
+                                closeButton: true,
+                                progressBar: true,
+                                showMethod: 'slideDown',
+                                timeOut: 4000
+                            };
+                            toastr.success("El registro ha sido modificado correctamente.");
+                            if($(".jqx-grid")[0]){$(".jqx-grid").jqxGrid('updatebounddata');}
+                            $("#edit_text_unidad").val("");
+                            $("#editModal").modal('hide');
+                        }
+                    }else{
+                        toastr.options = {
+                            closeButton: true,
+                            progressBar: true,
+                            showMethod: 'slideDown',
+                            timeOut: 4000
+                        };
+                        toastr.error('Ha ocurrido un error.');
+                    }
+                }
+            });
+	});
+
+    </script>
+</body>
+
+</html>

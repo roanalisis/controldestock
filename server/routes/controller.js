@@ -1,7 +1,8 @@
 const dao = require('../dao/dao'); //Permite crear la colección en la base de datos
 const db = require('../models/unidaddemedida'); //Permite crear la colección en la base de datos
 const _s = require('underscore.string');
-const _ = require('lodash');
+const _ = require('lodash')
+moment = require('moment');
 
 
 exports.nuevaunidaddemedidas = function(params, cb) {
@@ -39,13 +40,16 @@ exports.unidadesdemedidas_list = function(params, cb) {
         model: db.unidadesDeMedidas,
 
         //Poperty Array required for filtering
-        properties: [],
+        properties: [
+            { search: 'or', search_type: 'regex', field: 'unidad' },
+            { search: 'and', search_type: 'other', field: 'status', query: 1 }
+        ],
         //Custom paging for pre-lookups & pre-projects, make sure to determine sort, limit and skip
         custom_paging: {},
         //Custom aggregate for final lookups & projects 
         custom_aggregate: {
             $project: {
-                _id: 0,
+                _id: 1,
                 unidad: 1,
                 estado: 1,
             },
@@ -67,7 +71,6 @@ exports.unidadesdemedidas_list = function(params, cb) {
                         TotalRows: count,
                         Rows: Schema
                     }
-                    console.log(result);
                     return cb(false, result);
                 }
             });
@@ -77,23 +80,59 @@ exports.unidadesdemedidas_list = function(params, cb) {
 
 
 
-exports.actualizaunidaddemedidas = function(param, cb) {
-
+exports.actualizaunidaddemedidas = function(params, cb) {
     let data = {
         model: db.unidadesDeMedidas,
-        schema: {
-            unidad: param.unidad
-
+        audit: {
+            is_audit: false
+        },
+        filter: { _id: params._id },
+        update: {
+            $set: {
+                unidad: params.unidad
+            },
+            $push: {
+                history: {
+                    by: null,
+                    date: moment().toDate(),
+                    action: 'Update',
+                    code: '2'
+                }
+            }
         }
     };
-    dao.update(data, function(err, result) {
-        if (err) {
-            //console.log("Error: " + err);
-            return cb(true, result);
-        } else {
-            result.message = "se ha actualizado la unidad";
-            return cb(false, result);
 
+    dao.update(data, function(err, Schema) {
+        if (err) {
+            console.log(err);
+            return cb(true, null);
+        } else {
+            return cb(false, params);
+        }
+    });
+};
+
+
+
+
+exports.eliminaunidaddemedida = function(params, cb) {
+    let data = {
+        model: db.unidadesDeMedidas,
+        audit: {
+            is_audit: false
+        },
+        user: {
+            _id: null
+        },
+        filter: { _id: params._id },
+    };
+
+    dao.delete(data, function(err, Schema) {
+        if (err) {
+            console.log(err);
+            return cb(true, null);
+        } else {
+            return cb(false, Schema);
         }
     });
 };

@@ -1,9 +1,11 @@
 require('./config/config');
 
-const express = require('express');
-const mongoose = require('mongoose');
-const path = require('path');
-const app = express();
+const express = require('express'),
+    mongoose = require('mongoose'),
+    path = require('path'),
+    app = express(),
+    hbs = require('hbs'),
+    morgan = require('morgan');
 
 const bodyParser = require('body-parser');
 
@@ -17,7 +19,21 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 
+
+//middleware
+app.use(express.static(__dirname + '/public'));
+
+
+//express HBS engine
+hbs.registerPartials(__dirname + '/v/parciales');
+app.set('view engine', 'hbs');
+console.log(__dirname + '/v/parciales');
+
+
+
+
 //Configuración global de rutas
+app.use(morgan('dev'));
 app.use(require('./routes/index'));
 
 

@@ -87,15 +87,17 @@ exports.delete = function(data, cb) {
                 by: data.user._id,
                 date: moment().toDate(),
                 action: 'Delete',
-                code: 0
+                code: '0'
             }
         }
     };
-    this.schema_update(data, function(err, doc) {
+    console.log(data);
+    this.update(data, function(err, doc) {
         if (err) {
             console.log("DELETE ERROR: " + err);
             return cb(true, doc);
         } else {
+            console.log(doc);
             return cb(false, doc);
         }
     });
@@ -196,8 +198,9 @@ exports.aggregate = function(filter, cb) {
         aggregate.push(filter.custom_paging);
     } else {
         aggregate.push({ $sort: sortParams });
-        aggregate.push({ $limit: pagesize });
         aggregate.push({ $skip: recordstartindex });
+        aggregate.push({ $limit: pagesize });
+
     }
     //Project is always added last and only if the function was given a list of columns to project.
     if (filter.hasOwnProperty('custom_aggregate') && !_.isEmpty(filter.custom_aggregate)) {
@@ -211,6 +214,7 @@ exports.aggregate = function(filter, cb) {
             console.log(err);
             return cb(true, null);
         } else {
+            console.log(JSON.stringify(Schema));
             return cb(false, Schema);
         }
     });
